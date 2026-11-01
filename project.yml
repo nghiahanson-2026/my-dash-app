@@ -1,0 +1,40 @@
+# XcodeGen description. The cloud Mac turns this into MyDash.xcodeproj (see .github/workflows/build-ipa.yml).
+# Bundle ID prefix: nmax. If Sideloadly says the ID is already taken, add digits (e.g. nmax2026) in BOTH places.
+name: MyDash
+options:
+  bundleIdPrefix: com.nmax
+  deploymentTarget:
+    iOS: "16.0"
+packages:
+  DashProtocol:
+    path: Packages/DashProtocol
+targets:
+  MyDash:
+    type: application
+    platform: iOS
+    sources: [MyDash]
+    dependencies:
+      - package: DashProtocol
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nmax.mydash
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1"
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+    info:
+      path: MyDash/Info.plist
+      properties:
+        CFBundleDisplayName: MyDash
+        UILaunchScreen: {}
+        # Both protocol strings: Link A (map) and Link B (bike data, later). (docs/build/ios-mac.md)
+        UISupportedExternalAccessoryProtocols:
+          - com.garmin.navilite.data
+          - com.yconnect.data
+        UIBackgroundModes:
+          - location
+          - external-accessory
+          - bluetooth-central
+        NSLocationAlwaysAndWhenInUseUsageDescription: "MyDash cần vị trí của bạn để chỉ đường trên màn hình dash, cả khi điện thoại khóa."
+        NSLocationWhenInUseUsageDescription: "MyDash cần vị trí của bạn để chỉ đường trên màn hình dash."
+        NSBluetoothAlwaysUsageDescription: "MyDash dùng Bluetooth để kết nối với xe của bạn."

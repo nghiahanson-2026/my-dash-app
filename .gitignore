@@ -1,0 +1,10 @@
+*.xcodeproj
+build/
+.build/
+Payload/
+*.ipa
+.DS_Store
+# secrets never go in git
+*.p12
+*.mobileprovision
+.env
