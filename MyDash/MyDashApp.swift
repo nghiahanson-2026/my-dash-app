@@ -8,21 +8,37 @@ struct MyDashApp: App {
     }
 }
 
-/// Part 1 skeleton: proves the protocol package is linked into the app.
-/// The dash connection, share target, route and map renderer come in the next parts.
 struct ContentView: View {
-    private let selfTest: String = {
-        // The same check the vectors run: CRC-32/MPEG-2 of "123456789" must be 0x0376E6E7.
-        let crc = CRC32MPEG2.checksum(Array("123456789".utf8))
-        return crc == 0x0376_E6E7 ? "Protocol code: OK" : "Protocol code: ERROR"
-    }()
+    @StateObject private var dash = DashController()
 
     var body: some View {
-        VStack(spacing: 12) {
-            Text("MyDash").font(.largeTitle).bold()
-            Text(selfTest)
-            Text("Dash: not connected yet").foregroundStyle(.secondary)
+        NavigationStack {
+            List {
+                Section("Dash") {
+                    row("Trạng thái", dash.status)
+                    row("Màn hình", dash.screenText)
+                    row("Đã gửi", "\(dash.framesSent) khung (\(dash.lastJPEGBytes) byte/khung)")
+                    row("Tốc độ xe", dash.bikeSpeed.map { "\($0) km/h" } ?? "—")
+                    row("Nút tay lái", dash.lastButton)
+                }
+                Section("Nhật ký (gửi cho trợ lý nếu có lỗi)") {
+                    if dash.log.isEmpty {
+                        Text("Chưa có gì").foregroundStyle(.secondary)
+                    }
+                    ForEach(dash.log.reversed()) { line in
+                        Text(line.text).font(.caption.monospaced())
+                    }
+                }
+            }
+            .navigationTitle("MyDash")
         }
-        .padding()
+        .onAppear { dash.start() }
+    }
+
+    private func row(_ title: String, _ value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title).font(.caption).foregroundStyle(.secondary)
+            Text(value)
+        }
     }
 }

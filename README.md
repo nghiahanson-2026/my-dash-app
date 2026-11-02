@@ -9,11 +9,11 @@ App iPhone của bạn cho màn hình dash NMAX / XMAX. Dựa trên https://gith
 | 1. Khung dự án (XcodeGen, Info.plist, workflow) | xong, chưa build |
 | 2. Mã giao thức Link A (`Packages/DashProtocol`) | xong, chưa chạy bằng Swift thật |
 | 3. Test theo bộ vector | xong, sẽ chạy trong GitHub Actions |
-| 4. Nhận link chia sẻ từ Google Maps | chưa làm |
+| 4. Đọc link chia sẻ từ Google Maps (`ShareLinkParser`) | xong phần đọc link, test bằng vector; chưa có nút Share trong app |
 | 5. Chỉ đường, theo dõi vị trí | chưa làm |
 | 6. Vẽ bản đồ thành ảnh JPEG | chưa làm |
 | 7. Chạy nền khi khóa máy | chưa làm |
-| (kết nối thật với dash qua ExternalAccessory) | chưa làm |
+| Kết nối thật với dash (ExternalAccessory) | xong, gửi hình thử (lưới kẻ + số đếm), chưa thử trên xe |
 
 ## Trước khi build
 

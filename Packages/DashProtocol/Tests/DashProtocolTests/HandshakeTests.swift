@@ -128,3 +128,21 @@ final class HandshakeTests: XCTestCase {
         XCTAssertEqual(Array(last!.payload.prefix(3)), [0x03, 0x01, 0x00])
     }
 }
+
+extension HandshakeTests {
+    func testReadyForMapFrameFollowsShowAndAck() {
+        var s = DashSession()
+        var decoder = FrameDecoder()
+        func frame(_ hex: String) -> Frame {
+            guard case .frame(let f)? = decoder.feed(bytes(hex)).first else { fatalError("bad hex") }
+            return f
+        }
+        XCTAssertFalse(s.isReadyForMapFrame)
+        _ = s.receive(frame("6E 41 6C 40 01 01 37 02 00 00 00 00 2E 00 08 07 01 00"), now: 0)
+        XCTAssertTrue(s.isReadyForMapFrame)
+        _ = s.makeMapFrame(jpeg: [UInt8](repeating: 1, count: 3000), now: 1)
+        XCTAssertFalse(s.isReadyForMapFrame)
+        _ = s.receive(frame("6E 41 6C 40 01 03 50 02 00 00 00 00 C3 9F 33 07 50 01"), now: 1.1)
+        XCTAssertTrue(s.isReadyForMapFrame)
+    }
+}

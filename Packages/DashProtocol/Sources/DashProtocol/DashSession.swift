@@ -52,6 +52,9 @@ public struct DashSession {
 
     public init() {}
 
+    /// True when the rider has pressed Home and no map frame is waiting for its ACK.
+    public var isReadyForMapFrame: Bool { isStreaming && inFlightSince == nil }
+
     // MARK: Receiving
 
     public mutating func receive(_ frame: Frame, now: TimeInterval) -> SessionOutput {
